@@ -1,0 +1,56 @@
+# ============================================================
+# Spring Boot 商城后端核心配置文件
+# 文件位置：src/main/resources/application.yml
+# 编码格式：UTF-8
+# ============================================================
+
+# ------------------------------------------------------------
+# 1. Spring 框架通用配置（数据源、JPA、缓存等）
+# ------------------------------------------------------------
+spring:
+  # ---------- 数据源配置（连接真实的 MySQL 数据库） ----------
+  datasource:
+    # JDBC URL：告诉 Spring 如何连接数据库
+    # 格式：jdbc:mysql://主机IP:端口/数据库名?参数1=值1&参数2=值2
+    # 本地 MySQL 默认端口 3306，mall_db 是你提前建好的数据库名
+    # useUnicode=true&characterEncoding=utf8 → 支持中文
+    # serverTimezone=Asia/Shanghai → 解决时区报错，国内用上海时区
+    url: jdbc:mysql://localhost:3306/Mkappshopdev?useUnicode=true&characterEncoding=utf8&serverTimezone=Asia/Shanghai
+
+    # 数据库用户名（绝大多数情况是 root）
+    username: admin
+
+    # 数据库密码（❗务必改成你自己 MySQL 的密码，不能写死成“你的MySQL密码”）
+    password: 123456
+
+    # MySQL 驱动类全名（Spring Boot 3.x 强制要求使用 com.mysql.cj.jdbc.Driver）
+    driver-class-name: com.mysql.cj.jdbc.Driver
+
+  # ---------- JPA / Hibernate 配置（对象关系映射） ----------
+  jpa:
+    hibernate:
+      ddl-auto: update          # ⚠️ 开发环境使用，会自动更新表结构
+    show-sql: true              # 打印 SQL 语句，便于观察执行了哪些 DDL
+    generate-ddl: false
+    properties:
+      hibernate:
+        format_sql: true        # 格式化 SQL，更易读
+        dialect: org.hibernate.dialect.MySQL8Dialect  # 根据你的 MySQL 版本选择
+    database-platform: org.hibernate.dialect.MySQL8Dialect
+
+# ------------------------------------------------------------
+# 2. 内置 Web 服务器（Tomcat）配置
+# ------------------------------------------------------------
+server:
+  # 服务端口号（小程序后端常用 8080，可改成 80 或 443，但需要管理员权限）
+  port: 8080
+
+  servlet:
+    # 上下文路径，所有接口都会自动加上这个前缀
+    # 例如 @PostMapping("/login") 实际路径变为 http://localhost:8080/api/login
+    # 作用：方便前端区分静态资源和 API，也便于反向代理做路径转发
+    context-path: /api
+
+# ------------------------------------------------------------
+# 3. 自定义商城配置（非 Spring 官方，是你自己的业务配置）
+# ------------------------------------------------------------
